@@ -40,14 +40,11 @@ cd starterremote
 3. **Open the project:**
 Simply open the `index.html` file in your browser, or spin up a local server.
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://www.google.com/search?q=https://github.com/yourusername/starterremote/issues).
 
 ## 📬 Contact & Links
 
-* **Website:** [StarterRemote](https://www.google.com/search?q=https://your-cloudflare-link.pages.dev) *(Update this with your actual domain!)*
-* **Creator:** [Your Name / Alias]
+* **Website:** [StarterRemote]([https://www.google.com/search?q=https://your-cloudflare-link.pages.dev](https://starter-remote.arthur492lol.workers.dev/))
+* **Creator:** [MrArthurZ]
 
 ---
 
