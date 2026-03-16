@@ -1,0 +1,66 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: settings
+    // Document ID: 'global'
+    // Fields:
+    //   - announcement: string (optional, max 500 chars)
+    //   - announcementVisible: boolean (optional)
+    //   - updatedAt: timestamp (optional)
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - role: string (required, 'admin' or 'user')
+    //   - email: string (required)
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         (request.auth.token.email == "arthur492lol@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidSettings(data) {
+      return data.keys().hasOnly(['announcement', 'announcementVisible', 'updatedAt']) &&
+             (!('announcement' in data) || (data.announcement is string && data.announcement.size() <= 500)) &&
+             (!('announcementVisible' in data) || data.announcementVisible is bool) &&
+             (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasOnly(['role', 'email']) &&
+             data.keys().hasAll(['role', 'email']) &&
+             data.role in ['admin', 'user'] &&
+             data.email is string;
+    }
+
+    match /settings/{settingId} {
+      allow read: if true; // Publicly readable
+      allow create, update: if isAdmin() && isValidSettings(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      // Only admins can create or update users, or the user themselves can create their own profile as a 'user'
+      allow create: if isAuthenticated() && isValidUser(request.resource.data) &&
+        ((request.auth.uid == userId && request.resource.data.role == 'user') || isAdmin());
+      allow update: if isAuthenticated() && isValidUser(request.resource.data) &&
+        ((request.auth.uid == userId && request.resource.data.role == resource.data.role) || isAdmin());
+      allow delete: if isAdmin();
+    }
+  }
+}

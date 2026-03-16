@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Global settings for the website managed by the admin.",
+      "type": "object",
+      "properties": {
+        "announcement": {
+          "type": "string",
+          "description": "A global announcement banner text."
+        },
+        "announcementVisible": {
+          "type": "boolean",
+          "description": "Whether the announcement is visible."
+        },
+        "updatedAt": {
+          "type": "timestamp",
+          "description": "When the settings were last updated."
+        }
+      }
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile and role information.",
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": ["admin", "user"],
+          "description": "The role of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address."
+        }
+      },
+      "required": ["role", "email"]
+    }
+  },
+  "firestore": {
+    "settings/{settingId}": {
+      "schema": { "$ref": "#/entities/SiteSettings" },
+      "description": "Global site settings."
+    },
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles."
+    }
+  }
+}
