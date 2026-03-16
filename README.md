@@ -43,7 +43,7 @@ Simply open the `index.html` file in your browser, or spin up a local server.
 
 ## 📬 Contact & Links
 
-* **Website:** [StarterRemote] https://starter-remote.arthur492lol.workers.dev/)](https://starter-remote.jobfinding.workers.dev/
+* **Website:** [StarterRemote] https://starter-remote.jobfinding.workers.dev/
 * **Creator:** [MrArthurZ]
 
 ---
